@@ -1,74 +1,115 @@
-# MoTravel - The Ultimate Travel Companion 🌍✈️🏨🚖
+# MoTravel ✈️
 
-## Overview
+**Flights, hotels and taxis in one booking platform — with an AI vacation planner that actually reads your preferences.**
 
-Welcome to **MoTravel**, your all-in-one travel solution! Created by the one and only Vince Erkadoo in just two weeks, MoTravel is a fully functional platform designed to revolutionize the way you book flights, hotels, and taxis. Explore the world with ease, thanks to our AI-powered vacation planner that makes travel planning a breeze.
+[**Live demo**](https://motravel.vercel.app) · [**API docs (Swagger)**](https://travelapp-rvy5.onrender.com/api-docs/)
 
-**Live Demo**: [MoTravel](https://motravel.vercel.app)  
-**API Documentation**: [Swagger Docs](https://travelapp-rvy5.onrender.com/api-docs/)
-
-## Features 🚀
-
-### Flight Search and Booking ✈️
-- **Flight Search**: Easily search for flights by entering your departure and arrival locations, dates, and number of travelers.
-- **Flight Booking**: A seamless and secure flight booking process, complete with integrated payment options.
-
-### Hotel Management 🏨
-- **Hotel Registration**: Hotel owners can register and list their properties with detailed information about room types, amenities, and pricing.
-- **Sell Your Hotel**: A dedicated feature for hotel owners to manage and list their properties for sale.
-- **Book Hotels and Rooms**: Users can browse, select, and book hotels, viewing detailed descriptions and user reviews.
-
-### Taxi Services 🚖
-- **Become a Taxi Driver**: Individuals can register as taxi drivers, providing their services to travelers.
-- **Pick Up Locations**: Users can specify pick-up locations, ensuring convenient and timely transportation.
-
-### User Engagement ⭐
-- **Provide Feedback**: Users can leave feedback and reviews for hotels, helping improve service quality and assist other travelers in making informed decisions.
-
-## AI Vacation Planner 🤖
-- **Vacation Planning**: Our integrated AI planner assists users in planning their vacations by providing personalized suggestions for flights, hotels, and activities based on user preferences and past behavior.
-
-## Technical Details 🔧
-
-### Frontend
-- **Framework**: Next.js
-- **Components**: A variety of custom components such as `Navbar`, `TravelersForm`, `ContactInformationForm`, and more.
-- **State Management**: Managed using React hooks like useState and useEffect.
-- **Styling**: Tailwind CSS and custom CSS for a clean, modern interface.
-
-### Backend
-- **Framework**: Node.js
-- **Database**: MongoDB for storing user, booking, and hotel data.
-- **APIs**: Developed using Express.js for handling various operations like flight searches, hotel bookings, and user authentication.
-- **Payment Integration**: Secure payment processing for flight and hotel bookings.
-- **Swagger**: API documentation and testing using Swagger.
-
-## Getting Started 🏁
-
-To get started with MoTravel, follow these steps:
-
-1. **Clone the Repository**: Clone the project repository from GitHub.
-2. **Install Dependencies**: Navigate to the project directory and run `npm install` to install all required dependencies.
-3. **Set Up Environment Variables**: Configure the environment variables for both the frontend and backend.
-4. **Run the Application**: Use `npm run dev` to start the Next.js development server and `npm start` to run the Node.js backend.
-
-## Contributing 🤝
-
-We welcome contributions to MoTravel! Please follow these steps to contribute:
-
-1. **Fork the Repository**: Create a fork of the project repository on GitHub.
-2. **Create a Branch**: Create a new branch for your feature or bug fix.
-3. **Commit Changes**: Make your changes and commit them with clear and concise commit messages.
-4. **Open a Pull Request**: Submit a pull request to the main repository, detailing the changes you have made.
-
-## License 📜
-
-MoTravel is licensed under the MIT License. See the LICENSE file for more details.
-
-## Contact 📧
-
-For any inquiries or feedback, please contact Vince Erkadoo at erkadoovince@gmail.com.
+> The frontend is confirmed live. The Swagger instance is on Render's free tier, which spins down when idle — expect a cold start of up to a minute, and verify it still exists before pointing anyone at it.
 
 ---
 
-Experience the future of travel planning with MoTravel, where your dream trips become reality with just a few clicks. 🌟🌏
+## What it does
+
+MoTravel is a full travel-booking platform, not a mockup. It talks to **real flight inventory through the Amadeus API**, handles payment through Stripe, and stores bookings, hotels and users in MongoDB.
+
+### Flights
+Search by origin, destination, dates and traveller count against live Amadeus data, then book with integrated payment.
+
+### Hotels
+Two-sided: travellers browse, filter and book rooms; hotel owners register properties, define room types, amenities and pricing, and manage their listings.
+
+### Taxis
+Drivers register and set their availability. Travellers specify pickup points and get matched — routing is drawn on the map with Leaflet Routing Machine.
+
+### AI vacation planner
+Built on the Vercel AI SDK with OpenAI. Takes your preferences and constraints and returns a concrete itinerary — suggested flights, hotels and activities — rather than generic travel prose.
+
+### Carbon emissions tracking
+Trips are scored for their carbon footprint, so the cheapest itinerary isn't the only one you can compare on.
+
+### Reviews
+Travellers leave feedback on hotels, which feeds back into browse and search.
+
+---
+
+## Stack
+
+**Frontend** — Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui + Radix, Framer Motion, React Hook Form + Zod, Leaflet & Leaflet Routing Machine for maps
+
+**Backend** — Node.js, Express, MongoDB (Mongoose), JWT auth with bcrypt, Multer + Cloudinary for uploads, Nodemailer for transactional mail
+
+**Integrations** — Amadeus (flight search & booking), Stripe (payments), OpenAI + Vercel AI SDK (itinerary planning), Google Generative AI
+
+**Docs** — Swagger (`swagger-jsdoc` + `swagger-ui-express`), served at `/api-docs`
+
+---
+
+## Repository layout
+
+```
+travelapp/
+├── client/     # Next.js frontend
+└── server/     # Express API + Swagger docs
+```
+
+---
+
+## Running locally
+
+**Prerequisites:** Node.js 18+, a MongoDB instance (local or Atlas), and API keys for Amadeus, Stripe and OpenAI.
+
+```bash
+git clone https://github.com/vincedotcode/travelapp.git
+cd travelapp
+```
+
+**Backend**
+
+```bash
+cd server
+npm install
+cp .env.example .env      # fill in the values below
+npm run dev               # nodemon
+```
+
+Required environment variables:
+
+```bash
+MONGODB_URI=
+JWT_SECRET=
+AMADEUS_CLIENT_ID=
+AMADEUS_CLIENT_SECRET=
+STRIPE_SECRET_KEY=
+OPENAI_API_KEY=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+API docs are then at `http://localhost:<PORT>/api-docs`.
+
+**Frontend**
+
+```bash
+cd ../client
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+---
+
+## Notes
+
+Built solo over roughly two weeks. The Amadeus integration is the part worth reading if you're only reading one thing — flight search, offer pricing and booking confirmation are three separate calls with their own failure modes, and the reconciliation between them is where most of the complexity lives.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+## Contact
+
+Vince Erkadoo — [vincedotcode.com](https://vincedotcode.com) · [vince@vincedotcode.com](mailto:vince@vincedotcode.com)
